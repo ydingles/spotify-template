@@ -1,8 +1,98 @@
 var data;
 var baseUrl = 'https://api.spotify.com/v1/search?type=track&query='
-var myApp = angular.module('myApp', [])
+//var myApp = angular.module('myApp', ['ngMdIcons']) // material icons
+//var myApp = angular.module('myApp', ['picardy.fontawesome']) // animate icons
+// 'firebase' dependency
+var myApp = angular.module('myApp', ['firebase'])
 
-var myCtrl = myApp.controller('myCtrl', function($scope, $http) {
+// Bind controller
+var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $firebaseArray, $firebaseObject) {
+
+  // Create a variable 'ref' to reference your firebase storage
+  var refSpotify = new Firebase('https://myspotify.firebaseio.com/');
+
+  // Create references to store tweets and users
+  var usersRef = refSpotify.child("users");
+  var songsRef = refSpotify.child("songs");
+
+  // Create a firebaseObject of your users, and store this as part of $scope
+  $scope.users = $firebaseObject(usersRef);
+
+  // Create a firebaseArray of your songs, and store this as part of $scope
+  $scope.songs = $firebaseArray(songsRef);    
+
+  // Create authorization object that referes to firebase
+  $scope.authObj = $firebaseAuth(refSpotify);
+
+    // Test if already logged in
+  var authData = $scope.authObj.$getAuth();
+  if (authData) {
+    $scope.userId = authData.uid;
+  } 
+
+  // SignUp function
+  $scope.signUp = function() {
+    // Create user
+    $scope.authObj.$createUser({
+      email: $scope.email,
+      password: $scope.password,      
+    })
+
+    // Once the user is created, call the logIn function
+    .then($scope.logIn)
+
+    // Once logged in, set and save the user data
+    .then(function(authData) {
+      $scope.userId = authData.uid;
+      $scope.users[authData.uid] ={
+        handle:$scope.handle, 
+        userImage:$scope.userImage,
+      }
+      $scope.users.$save()
+    })
+
+    // Catch any errors
+    .catch(function(error) {
+      console.error("Error: ", error);
+    });
+  }
+
+  // SignIn function
+  $scope.signIn = function() {
+    $scope.logIn().then(function(authData){
+      $scope.userId = authData.uid;
+    })
+  }
+
+  // LogIn function
+  $scope.logIn = function() {
+    console.log('log in')
+    return $scope.authObj.$authWithPassword({
+      email: $scope.email,
+      password: $scope.password
+    })
+  }
+
+  // LogOut function
+  $scope.logOut = function() {
+    $scope.authObj.$unauth()
+    $scope.userId = false
+  }
+
+    // Write an accesible songsave function to save a song
+  $scope.songsave = function() {
+
+    // Add a new object to the song array using the firebaseArray .$add method.     
+    $scope.songs.$add({
+      //text: $scope.audioObject.currentSong.track,
+      userId:$scope.userId, 
+      song:$scope.track
+      //likes:0, 
+      //time:Firebase.ServerValue.TIMESTAMP
+    })
+  }
+
+  // spotify audio
   $scope.audioObject = {}
   $scope.getSongs = function() {
     $http.get(baseUrl + $scope.track).success(function(response){
@@ -23,6 +113,12 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http) {
       $scope.currentSong = song
     }
   }
+
+  // $scope.addsong = function() {
+  //   $scope.track.name
+  // }
+
+
 })
 
 // Add tool tips to anything with a title property
