@@ -1,7 +1,5 @@
 var data;
 var baseUrl = 'https://api.spotify.com/v1/search?type=track&query='
-//var myApp = angular.module('myApp', ['ngMdIcons']) // material icons
-//var myApp = angular.module('myApp', ['picardy.fontawesome']) // animate icons
 // 'firebase' dependency
 var myApp = angular.module('myApp', ['firebase'])
 
@@ -45,9 +43,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     .then(function(authData) {
       $scope.userId = authData.uid;
       $scope.users[authData.uid] ={
-        // handle:$scope.handle,
         username:$scope.username 
-        // userImage:$scope.userImage,
       }
       $scope.users.$save()
     })
@@ -87,7 +83,6 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     // Add a new object to the song array using the firebaseArray .$add method.     
     $scope.songs.$add({
       userId:$scope.userId, 
-      //likes: 0,
       song:track.name,
       artist:track.artists[0].name,
       image:track.album.images[2].url,

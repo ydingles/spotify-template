@@ -38,7 +38,6 @@
 		<header>
 			<div class="fa fa-spotify fa-2x" id="faspot"></div>
 			<div class="log-out" ng-show="userId">
-				<!-- <span>{{users[userId].handle}}</span> -->
 				<span>{{users[userId].username}}</span>
 				<button ng-click="logOut()" class="btn btn-warning">Logout</button>
 			</div>
@@ -80,7 +79,7 @@
 
 			<div class="container" id="songSearch">
 				<div class="row">
-					<!-- Form -->
+					<!-- Song Search Form -->
 					<form class="container" name="songForm">
 						<div class="col-sm-11">
 						<input name="search" placeholder="Enter your search.." ng-model="track" class="form-control"></input>
@@ -103,7 +102,6 @@
 			
 						<table><tr ng-repeat="track in tracks">
 							<td><a href><i class="fa fa-play-circle" ng-click="play(track.preview_url)" title="{{track.name}}"></i></a></td>
-						<!--<td><ng-md-icon icon="play_circle_fill" style="fill:pink" size="24" ng-click="play(track.preview_url)" ></ng-md-icon></td>-->
 							<td>{{track.artists[0].name}}</td>
 							<td>{{track.name}}</td>
 							<td><img ng-src="{{track.album.images[2].url}}"></img></td>
@@ -119,7 +117,6 @@
 
 						<table><tr ng-repeat="song in songs | orderBy : '-time'">
 						<!-- Put in the text of the song -->
-							<!-- <td><i class="fa fa-play-circle" ng-click="play({{song.play}})"></i></td> -->
 							<td>{{song.artist}} - {{song.song}}</td>
 							<td><a href><i class="fa fa-minus" ng-click="songs.$remove(song)"></i></a></td> 
 						</tr></table>
