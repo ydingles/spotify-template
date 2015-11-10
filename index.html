@@ -104,23 +104,45 @@
 				<!-- Results -->
 				<!--<div class="container-fixed">-->
 				<div class="col-sm-6">
-					<div class="help-block">
-						<span ng-show="tracks.length>0">Click <i class="fa fa-play-circle"></i> to sample</span>
+					<!-- <div class="help-block"> -->
+						<p>Here are your search results:</p>
+						<span ng-show="tracks.length>0">Click <i class="fa fa-play-circle"></i> to sample and <i class="fa fa-plus"></i> to save the song (sign-in).</span>
 						<span ng-show="currentSong && !audioObject.paused"><i class="fa fa-music"></i></span>
-					</div>
+					<!-- </div> -->
 			
-					<table><tr ng-repeat="track in tracks" title="{{track.name}}">
-						<td><i class="fa fa-play-circle" ng-click="play(track.preview_url)"></i></td>
+					<table><tr ng-repeat="track in tracks">
+						<td><a href><i class="fa fa-play-circle" ng-click="play(track.preview_url)" title="{{track.name}}"></i></a></td>
 						<!--<td><ng-md-icon icon="play_circle_fill" style="fill:pink" size="24" ng-click="play(track.preview_url)" ></ng-md-icon></td>-->
 						<td>{{track.artists[0].name}}</td>
 						<td>{{track.name}}</td>
 						<td><img ng-src="{{track.album.images[2].url}}"></img></td>
-						<td><a ng-href="{{track.album.external_urls.spotify}}">Listen on Spotify</a></td>
-						<!--<td><a ng-href="{{track.album.href}}">href</a></td>
-						<td>{{track.artists[0]}}</td>-->
-						<td><i class="fa fa-plus" ng-click="songsave(track.name)"></i></td>
+						<td><a ng-href="{{track.album.external_urls.spotify}}"><i class="fa fa-spotify"></i></a></td>
+						<td ng-show="userId"><a href><i class="fa fa-plus" ng-click="songsave(track)"></i></a></td>
 					</tr></table>
 				</div>
+
+				<!-- Show user's saved songs! -->
+				<div class="col-sm-6" ng-show="userId">
+					<p>Songs you have saved:</p>
+					<!-- Use ng-repeat directive to repeat a div for each element in songs array -->
+					<!-- <div class="song-box" ng-repeat="song in songs | orderBy : '-time'"> -->
+						<!-- Put in the text of the song -->
+							<!-- <i class="fa fa-play-circle" ng-click="play({{song.play}})"></i> -->
+							<!-- <span>{{song.artist}} - {{song.song}}</span> -->
+							<!-- <img class="image" ng-src="{{song.image}}"></img>  -->
+					<!-- </div> -->
+
+					<span>Click <i class="fa fa-minus"></i> to remove the song from your list.</span>
+
+					<table><tr ng-repeat="song in songs | orderBy : '-time'">
+						<!-- Put in the text of the song -->
+							<!-- <td><i class="fa fa-play-circle" ng-click="play({{song.play}})"></i></td> -->
+							<td><span>{{song.artist}} - {{song.song}}</span></td>
+							<!-- <img class="image" ng-src="{{song.image}}"></img>  -->
+							<td><a href><i class="fa fa-minus" ng-click="songs.$remove(song)"></i></a></td> 
+					</tr></table>
+				</div>
+
 			</div>
 		</div>
 </body>

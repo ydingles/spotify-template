@@ -15,3 +15,11 @@ table tr:nth-child(odd) {
 table tr:nth-child(even) {
   background-color: #ffffff;
 }
+
+.song-box {
+	border-bottom:1px solid #d3d3d3;
+	padding:20px;
+	margin-left:100px;
+	margin-right:100px;
+	background-color: white;
+}

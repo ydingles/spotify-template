@@ -79,16 +79,41 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     $scope.userId = false
   }
 
-    // Write an accesible songsave function to save a song
-  $scope.songsave = function() {
+  //   // Write an accesible songsave function to save a song
+  // $scope.songsave = function(track) {
+
+  //   // Add a new object to the song array using the firebaseArray .$add method.     
+  //   $scope.songs.$add({
+  //     //text: $scope.audioObject.currentSong.track,
+  //     userId:$scope.userId, 
+  //     //likes: 0,
+  //     song:track
+  //     time:Firebase.ServerValue.TIMESTAMP
+  //   })
+  // }
+
+      // Write an accesible songsave function to save a song
+  $scope.songsave = function(track) {
 
     // Add a new object to the song array using the firebaseArray .$add method.     
     $scope.songs.$add({
-      //text: $scope.audioObject.currentSong.track,
       userId:$scope.userId, 
-      song:$scope.track
-      //likes:0, 
-      //time:Firebase.ServerValue.TIMESTAMP
+      //likes: 0,
+      song:track.name,
+      artist:track.artists[0].name,
+      image:track.album.images[2].url,
+      play:track.preview_url,
+      time:Firebase.ServerValue.TIMESTAMP
+    })
+  }
+
+  $scope.songremove = function(track) {
+    $scope.songs.$remove({
+      song:null,
+      artist:null,
+      image:null,
+      play:null,
+      time:Firebase.ServerValue.TIMESTAMP
     })
   }
 
@@ -113,11 +138,6 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
       $scope.currentSong = song
     }
   }
-
-  // $scope.addsong = function() {
-  //   $scope.track.name
-  // }
-
 
 })
 
