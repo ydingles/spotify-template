@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Spotify</title>
-	
+
 	<!-- Include libraries -->
 	<!--j Query-->
 	<script src="https://code.jquery.com/jquery.min.js"></script>
@@ -28,7 +28,7 @@
 	<!-- Read scripts -->
 	<script src="app.js"></script>
 	<link href="app.css" type="text/css" rel="stylesheet"/>	
-	
+
 </head>
 <body>
 	<!-- Initiate app -->
@@ -36,114 +36,98 @@
 
 		<!-- Header with logout button -->
 		<header>
-			<span class="fa fa-spotify fa-2x"></span>
+			<div class="fa fa-spotify fa-2x" id="faspot"></div>
 			<div class="log-out" ng-show="userId">
-				<span>{{users[userId].handle}}</span>
+				<!-- <span>{{users[userId].handle}}</span> -->
+				<span>{{users[userId].username}}</span>
 				<button ng-click="logOut()" class="btn btn-warning">Logout</button>
 			</div>
+
+
+			<div class="container" id="useridForm">
+				<div class="row">
+				<!-- Sign-in/sign-up form: show if userId isn't defined -->
+					<form name="myForm" ng-show="!userId" novalidate>
+						<div class="col-sm-3">
+							<input ng-model="username" ng-minlength="5" name="username" class="form-control" placeholder="username">	
+							<!-- Add an error message if the length is too short -->	
+							<p class="help-block" ng-show="myForm.username.$error.minlength">Too short!</p>
+						</div>						
+
+						<!-- Bind model "email" to this input and make it required -->
+						<div class="col-sm-3">
+							<input ng-model="email" name="email" type="email" class="form-control" placeholder="email"></input>
+							<!-- Show an error message if the email is not valid	 -->
+							<p class="help-block" ng-show="myForm.email.$error.email">Not an email!</p>
+						</div>
+
+						<!-- Password -->
+						<div class="col-sm-3">
+							<input  name="password" type="password" class="form-control" ng-model="password" required placeholder="password"></input>      
+						</div>
+
+						<!-- Submit buttons: should only be active if certain inputs are valid -->
+						<div class="col-sm-3">
+							<button ng-click="signUp()" ng-disabled="myForm.$invalid" type="submit" class="btn btn-primary">Sign-up</button> 
+							<button ng-click="signIn()" ng-disabled="myForm.email.$invalid || myForm.password.$invalid" type="submit" class="btn btn-primary">Sign-in</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
 		</header>
 
-		<!-- Container div -->
-		<div class="container">
-			<div class="col-sm-12" id="useridForm">
-					
-				<!-- Sign-in/sign-up form: show if userId isn't defined -->
-				<form name="myForm" ng-show="!userId" novalidate>
-				<!-- Bind model "handle" to this input, set minimum length, and make it required -->
-					<div class="form-group">
-						<label>Handle:</label>
-						<input ng-model="handle" ng-minlength="5" name="handle" class="form-control">	
-						
-						<!-- Add an error message if the length is too short -->	
-						<p class="help-block" ng-show="myForm.handle.$error.minlength">Too short!</p>
-						
-					</div>	
 
-					<!-- Input for image URL -->
-					<div class="form-group">
-						<label>Image URL:</label>
-						<img ng-src="{{userImage}}">							
-						<input name="img" class="form-control" ng-model="userImage">
-					</div>
-
-					<!-- Bind model "email" to this input and make it required -->
-					<div class="form-group">
-						<label>Email:</label>
-						<input  ng-model="email" name="email" type="email" class="form-control"></input>
-
-						<!-- Show an error message if the email is not valid -->	
-						<p class="help-block" ng-show="myForm.email.$error.email">Not an email!</p>
-					</div>
-
-					<!-- Password -->
-					<div class="form-group">
-						<label>Password:</label>
-						<input  name="password" type="password" class="form-control" ng-model="password" required></input>      
-					</div>
-
-					<!-- Submit buttons: should only be active if certain inputs are valid -->
-					<div class="form-group">
-						<button ng-click="signUp()" ng-disabled="myForm.$invalid" type="submit" class="btn btn-primary">Sign-up</button> 
-						<button ng-click="signIn()" ng-disabled="myForm.email.$invalid || myForm.password.$invalid" type="submit" class="btn btn-primary">Sign-in</button>
-					</div>
-				</form>
-			</div>
-
-			<div class="col-sm-12" id="songidForm">
-			<!-- Form -->
-				<form class="container" name="songForm">
-					<div class="form-group">
-						<label>Spotify search:</label>
+			<div class="container" id="songSearch">
+				<div class="row">
+					<!-- Form -->
+					<form class="container" name="songForm">
+						<div class="col-sm-11">
 						<input name="search" placeholder="Enter your search.." ng-model="track" class="form-control"></input>
-					</div>
-					<div class="form-group">
+						</div>
+						
+						<div class="col-sm-1">
 						<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getSongs()" type="submit">Submit</button>
-					</div>
-				</form>
+						</div>
+					</form>
+				</div>
+			</div>
 		
-				<!-- Results -->
-				<!--<div class="container-fixed">-->
-				<div class="col-sm-6">
-					<!-- <div class="help-block"> -->
-						<p>Here are your search results:</p>
+			<!-- Results -->
+			<div class="container" id="songResults">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2 ng-show="tracks.length>0">Search results</h2>
 						<span ng-show="tracks.length>0">Click <i class="fa fa-play-circle"></i> to sample and <i class="fa fa-plus"></i> to save the song (sign-in).</span>
 						<span ng-show="currentSong && !audioObject.paused"><i class="fa fa-music"></i></span>
-					<!-- </div> -->
 			
-					<table><tr ng-repeat="track in tracks">
-						<td><a href><i class="fa fa-play-circle" ng-click="play(track.preview_url)" title="{{track.name}}"></i></a></td>
+						<table><tr ng-repeat="track in tracks">
+							<td><a href><i class="fa fa-play-circle" ng-click="play(track.preview_url)" title="{{track.name}}"></i></a></td>
 						<!--<td><ng-md-icon icon="play_circle_fill" style="fill:pink" size="24" ng-click="play(track.preview_url)" ></ng-md-icon></td>-->
-						<td>{{track.artists[0].name}}</td>
-						<td>{{track.name}}</td>
-						<td><img ng-src="{{track.album.images[2].url}}"></img></td>
-						<td><a ng-href="{{track.album.external_urls.spotify}}"><i class="fa fa-spotify"></i></a></td>
-						<td ng-show="userId"><a href><i class="fa fa-plus" ng-click="songsave(track)"></i></a></td>
-					</tr></table>
-				</div>
+							<td>{{track.artists[0].name}}</td>
+							<td>{{track.name}}</td>
+							<td><img ng-src="{{track.album.images[2].url}}"></img></td>
+							<td><a ng-href="{{track.album.external_urls.spotify}}"><i class="fa fa-spotify"></i></a></td>
+							<td ng-show="userId"><a href><i class="fa fa-plus" ng-click="songsave(track)"></i></a></td>
+						</tr></table>
+					</div>
 
-				<!-- Show user's saved songs! -->
-				<div class="col-sm-6" ng-show="userId">
-					<p>Songs you have saved:</p>
-					<!-- Use ng-repeat directive to repeat a div for each element in songs array -->
-					<!-- <div class="song-box" ng-repeat="song in songs | orderBy : '-time'"> -->
-						<!-- Put in the text of the song -->
-							<!-- <i class="fa fa-play-circle" ng-click="play({{song.play}})"></i> -->
-							<!-- <span>{{song.artist}} - {{song.song}}</span> -->
-							<!-- <img class="image" ng-src="{{song.image}}"></img>  -->
-					<!-- </div> -->
+					<!-- Show user's saved songs! -->
+					<div class="col-sm-6" ng-show="userId" id="savedForm">
+						<h2>Saved songs</h2>
+						<span>Click <i class="fa fa-minus"></i> to remove the song from your list.</span>
 
-					<span>Click <i class="fa fa-minus"></i> to remove the song from your list.</span>
-
-					<table><tr ng-repeat="song in songs | orderBy : '-time'">
+						<table><tr ng-repeat="song in songs | orderBy : '-time'">
 						<!-- Put in the text of the song -->
 							<!-- <td><i class="fa fa-play-circle" ng-click="play({{song.play}})"></i></td> -->
-							<td><span>{{song.artist}} - {{song.song}}</span></td>
-							<!-- <img class="image" ng-src="{{song.image}}"></img>  -->
+							<td>{{song.artist}} - {{song.song}}</td>
 							<td><a href><i class="fa fa-minus" ng-click="songs.$remove(song)"></i></a></td> 
-					</tr></table>
+						</tr></table>
+					</div>
+
 				</div>
 
 			</div>
-		</div>
+	</div>
 </body>
 </html>

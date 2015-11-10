@@ -45,8 +45,9 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     .then(function(authData) {
       $scope.userId = authData.uid;
       $scope.users[authData.uid] ={
-        handle:$scope.handle, 
-        userImage:$scope.userImage,
+        // handle:$scope.handle,
+        username:$scope.username 
+        // userImage:$scope.userImage,
       }
       $scope.users.$save()
     })
@@ -79,20 +80,8 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     $scope.userId = false
   }
 
-  //   // Write an accesible songsave function to save a song
-  // $scope.songsave = function(track) {
 
-  //   // Add a new object to the song array using the firebaseArray .$add method.     
-  //   $scope.songs.$add({
-  //     //text: $scope.audioObject.currentSong.track,
-  //     userId:$scope.userId, 
-  //     //likes: 0,
-  //     song:track
-  //     time:Firebase.ServerValue.TIMESTAMP
-  //   })
-  // }
-
-      // Write an accesible songsave function to save a song
+  // Write an accesible songsave function to save a song
   $scope.songsave = function(track) {
 
     // Add a new object to the song array using the firebaseArray .$add method.     
@@ -107,6 +96,7 @@ var myCtrl = myApp.controller('myCtrl', function($scope, $http, $firebaseAuth, $
     })
   }
 
+  // Write an accessible songremove function to remove a song
   $scope.songremove = function(track) {
     $scope.songs.$remove({
       song:null,

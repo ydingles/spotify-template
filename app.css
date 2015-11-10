@@ -1,25 +1,69 @@
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css);
 
+header {
+  text-align: center;
+  text-transform: uppercase;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+header #useridForm {
+  float: right;
+}
+
+header #faspot {
+  color: #FFF;
+  float: left;
+}
+
+header .log-out {
+  float:right;
+}
+
 body {
+  background-image: url("http://students.washington.edu/ydingles/info343/spotify/img/retro.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
   padding:10px;
 }
 
-table, th , td {
-  border: 1px solid grey;
-  border-collapse: collapse;
-  padding: 5px;
-}
-table tr:nth-child(odd) {
-  background-color: #f1f1f1;
-}
-table tr:nth-child(even) {
-  background-color: #ffffff;
+body #songSearch {
+  padding-top: 25px;
 }
 
-.song-box {
-	border-bottom:1px solid #d3d3d3;
-	padding:20px;
-	margin-left:100px;
-	margin-right:100px;
-	background-color: white;
+div {
+  padding-bottom: 10px
+}
+
+table, th, td {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  padding: 5px;
+  opacity:0.9;
+}
+
+table tr:nth-child(odd) {
+  background-color: #de8f22;
+}
+
+table tr:nth-child(even) {
+  background-color: #dfa75b;
+}
+
+p {
+  color: #FFF;
+}
+
+h2 {
+  color: #FFF;
+  border-bottom: 5px solid;
+  border-bottom-color: #FFF;
+  text-transform: uppercase;
+  text-align: right;
+  padding: 10px;
+}
+
+span {
+  color: #FFF;
 }
